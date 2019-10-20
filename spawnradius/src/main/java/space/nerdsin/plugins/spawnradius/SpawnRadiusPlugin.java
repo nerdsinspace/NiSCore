@@ -31,7 +31,7 @@ public class SpawnRadiusPlugin extends JavaPlugin implements Listener {
     getServer().getPluginManager().registerEvents(this, this);
   }
   
-  @EventHandler(priority = EventPriority.MONITOR)
+  @EventHandler(priority = EventPriority.HIGHEST)
   public void onPlayerRespawn(final PlayerRespawnEvent event) {
     if(!event.isBedSpawn()) {
       Location location = event.getRespawnLocation();
