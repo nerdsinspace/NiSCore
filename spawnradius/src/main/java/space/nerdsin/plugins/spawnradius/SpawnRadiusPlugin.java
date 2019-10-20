@@ -1,4 +1,4 @@
-package space.nerdsin.spawnradius;
+package space.nerdsin.plugins.spawnradius;
 
 import java.util.concurrent.ThreadLocalRandom;
 import org.bukkit.Location;
