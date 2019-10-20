@@ -6,8 +6,3 @@ group 'space.nerdsin.plugins'
 version '1.0'
 
 sourceCompatibility = 1.8
-
-dependencies {
-  compile libraries.paperapi
-  testCompile group: 'junit', name: 'junit', version: '4.12'
-}

@@ -7,17 +7,28 @@ version '1.0'
 
 sourceCompatibility = 1.8
 
-allprojects {
-  ext {
-    libraries = [
-      paperapi: 'com.destroystokyo.paper:paper-api:1.13.2-R0.1-SNAPSHOT'
-    ]
-  }
-  
+subprojects {
   repositories {
     mavenCentral()
     maven {
       url 'https://papermc.io/repo/repository/maven-public/'
+    }
+  }
+  
+  afterEvaluate {
+    dependencies {
+      compile group: 'com.destroystokyo.paper', name: 'paper-api', version: '1.13.2-R0.1-SNAPSHOT'
+    }
+    
+    processResources {
+      filesMatching('**/plugin.yml') {
+        filter(org.apache.tools.ant.filters.ReplaceTokens, tokens: [
+            'name'      : project.property('pretty-name') ?: project.name,
+            'class'     : project.property('main'),
+            'version'   : project.version,
+            'apiversion': project.property('apiversion')
+        ]);
+      }
     }
   }
 }
