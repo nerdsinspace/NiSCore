@@ -1,0 +1,23 @@
+plugins {
+    id 'java'
+}
+
+group 'space.nerdsin.plugins'
+version '1.0'
+
+sourceCompatibility = 1.8
+
+allprojects {
+  ext {
+    libraries = [
+      paperapi: 'com.destroystokyo.paper:paper-api:1.13.2-R0.1-SNAPSHOT'
+    ]
+  }
+  
+  repositories {
+    mavenCentral()
+    maven {
+      url 'https://papermc.io/repo/repository/maven-public/'
+    }
+  }
+}
