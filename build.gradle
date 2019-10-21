@@ -23,7 +23,8 @@ subprojects {
     processResources {
       filesMatching('**/plugin.yml') {
         filter(org.apache.tools.ant.filters.ReplaceTokens, tokens: [
-            'name'      : project.property('pretty-name') ?: project.name,
+            'name'      : project.hasProperty('pretty-name')
+                ? project.property('pretty-name') : project.name,
             'class'     : project.property('main'),
             'version'   : project.version,
             'apiversion': project.property('apiversion')
