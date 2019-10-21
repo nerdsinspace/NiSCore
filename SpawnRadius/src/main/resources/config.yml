@@ -5,8 +5,12 @@ spawn.x: 0
 # Default: 0
 spawn.z: 0
 # The radius of the random player spawns
-# Default: 500
-radius: 500
+# Default: 128
+radius: 128
+# Number of attempts to make to find solid ground
+# Useful if spawn has a lot of water or non-walkable surfaces in it
+# Default: 16
+attempts: 16
 # If the world should keep its original spawn point
 # Default: false
 original: false
