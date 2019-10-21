@@ -11,24 +11,25 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class SpawnRadiusPlugin extends JavaPlugin implements Listener {
   
-  private int radius = 0;
   private int spawnX = 0;
   private int spawnZ = 0;
-  private boolean normal = false;
+  private int radius = 0;
   
   @Override
   public void onEnable() {
-    getConfig().addDefault("spawn.radius", 500);
-    getConfig().addDefault("spawn.pos.x", 0);
-    getConfig().addDefault("spawn.pos.z", 0);
-    getConfig().addDefault("spawn.pos.normal", false);
-    
     saveDefaultConfig();
+  
+    this.spawnX = getConfig().getInt("spawn.x");
+    this.spawnZ = getConfig().getInt("spawn.z");
+    this.radius = Math.abs(getConfig().getInt("radius"));
     
-    this.radius = Math.abs(getConfig().getInt("spawn.radius"));
-    this.spawnX = getConfig().getInt("spawn.pos.x");
-    this.spawnZ = getConfig().getInt("spawn.pos.z");
-    this.normal = getConfig().getBoolean("spawn.pos.normal");
+    if(getConfig().getBoolean("original")) {
+      getServer().getWorlds().forEach(world -> world.setSpawnLocation(
+          spawnX,
+          world.getHighestBlockYAt(spawnX, spawnZ),
+          spawnZ
+      ));
+    }
     
     getServer().getPluginManager().registerEvents(this, this);
   }
@@ -37,11 +38,8 @@ public class SpawnRadiusPlugin extends JavaPlugin implements Listener {
   public void onPlayerRespawn(final PlayerRespawnEvent event) {
     if(!event.isBedSpawn()) {
       Location location = event.getRespawnLocation();
-      if(normal) {
-        event.setRespawnLocation(randomLocation(location.getBlockX(), location.getBlockZ(), location.getWorld()));
-      } else {
-        event.setRespawnLocation(randomLocation(spawnX, spawnZ, location.getWorld()));
-      }
+      Location sl = location.getWorld().getSpawnLocation();
+      event.setRespawnLocation(randomLocation(sl.getBlockX(), sl.getBlockZ(), location.getWorld()));
     }
   }
   
