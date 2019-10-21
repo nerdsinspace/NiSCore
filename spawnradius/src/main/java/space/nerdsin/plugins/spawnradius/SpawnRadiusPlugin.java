@@ -23,6 +23,8 @@ public class SpawnRadiusPlugin extends JavaPlugin implements Listener {
     getConfig().addDefault("spawn.pos.z", 0);
     getConfig().addDefault("spawn.pos.normal", false);
     
+    saveDefaultConfig();
+    
     this.radius = Math.abs(getConfig().getInt("spawn.radius"));
     this.spawnX = getConfig().getInt("spawn.pos.x");
     this.spawnZ = getConfig().getInt("spawn.pos.z");
