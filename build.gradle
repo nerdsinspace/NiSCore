@@ -1,5 +1,5 @@
 plugins {
-    id 'java'
+  id 'java'
 }
 
 group 'space.nerdsin.plugins'
@@ -8,11 +8,17 @@ version '1.0'
 sourceCompatibility = 1.8
 
 subprojects {
+  apply plugin: 'java'
+  
   repositories {
     mavenCentral()
     maven {
       url 'https://papermc.io/repo/repository/maven-public/'
     }
+  }
+  
+  jar {
+    destinationDir project.file('../jars')
   }
   
   afterEvaluate {
@@ -32,4 +38,9 @@ subprojects {
       }
     }
   }
+}
+
+task copyPluginJars(type: Copy, dependsOn: subprojects.jar) {
+  from(rootProject.subprojects.jar)
+  into project.file('jars')
 }
