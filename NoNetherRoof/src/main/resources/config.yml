@@ -1,0 +1,18 @@
+# The maximum height (inclusive) a player can be in the nether before being setback
+# Default: 128
+max-height: 128
+# Amount of damage to apply to a player if the mode is set to damage
+# Default: 4.0
+damage: 4.0
+# Punishment mode for hitting maximum height. Has 3 different options
+#   SETBACK   - Sets the player back
+#   DAMAGE    - Hurts the player
+#   KILL      - Kills the player instantly
+# Default: SETBACK
+mode: SETBACK
+# If this should only be enforced on players in survival mode
+# Default: true
+survival-only: true
+# If this should be enforced on OP players
+# Default: false
+include-ops: false
