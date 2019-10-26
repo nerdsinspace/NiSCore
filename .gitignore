@@ -3,3 +3,5 @@
 jars/
 build/
 */build/
+
+EnhancedChat/*.sqlite

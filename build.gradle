@@ -8,6 +8,15 @@ version '1.0'
 sourceCompatibility = 1.8
 
 subprojects {
+  ext {
+    jooqGradleVersion = '3.0.3'
+    jooqVersion = '3.12.1'
+    
+    sqliteJdbcVersion = '3.25.2'
+    
+    flywayCoreVersion = '6.0.7'
+  }
+  
   apply plugin: 'java'
   
   repositories {
@@ -17,13 +26,24 @@ subprojects {
     }
   }
   
-  jar {
-    destinationDir project.file('../jars')
+  task copyLibraryJars(type: Copy) {
+    from configurations.compile
+    into rootProject.file('jars/libs')
   }
+  
+  build.finalizedBy copyLibraryJars
   
   afterEvaluate {
     dependencies {
-      compile group: 'com.destroystokyo.paper', name: 'paper-api', version: '1.13.2-R0.1-SNAPSHOT'
+      implementation group: 'com.destroystokyo.paper', name: 'paper-api', version: '1.13.2-R0.1-SNAPSHOT'
+    }
+  
+    jar {
+      manifest {
+        attributes(
+            "Class-Path": configurations.compile.collect { "libs/${it.getName()}" }.join(' '))
+      }
+      destinationDir rootProject.file('jars')
     }
     
     processResources {
@@ -40,7 +60,13 @@ subprojects {
   }
 }
 
+sourceSets {}
+
+gradle.buildFinished {
+  project.buildDir.deleteDir()
+}
+
 task copyPluginJars(type: Copy, dependsOn: subprojects.jar) {
-  from(rootProject.subprojects.jar)
+  from subprojects.jar
   into project.file('jars')
 }

@@ -1,0 +1,17 @@
+name: @name@
+main: @class@
+version: @version@
+api-version: @apiversion@
+commands:
+  ignore:
+    description: Hide a players messages from chat
+    usage: /ignore <player name>
+    permission: enhancedchat.ignore
+  unignore:
+    description: Stop ignoring a players messages
+    usage: /unignore <player name>
+    permission: enhancedchat.unignore
+  ignorelist:
+    description: Shows a list of people ignored
+    usage: /ignorelist [page]
+    permission: enhancedchat.ignorelist

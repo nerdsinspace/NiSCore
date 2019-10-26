@@ -1,0 +1,76 @@
+group 'space.nerdsin.plugins'
+version '1.0'
+
+sourceCompatibility = 1.8
+
+buildscript {
+  repositories {
+    mavenCentral()
+    maven {
+      url 'https://plugins.gradle.org/m2/'
+    }
+  }
+  dependencies {
+    classpath("nu.studer:gradle-jooq-plugin:${jooqGradleVersion}")
+  }
+}
+
+apply plugin: 'java'
+apply plugin: 'nu.studer.jooq'
+
+jooq {
+  version = jooqVersion
+  edition = 'OSS'
+  sqlite(sourceSets.main) {
+    jdbc {
+      driver = 'org.sqlite.JDBC'
+      url = "jdbc:sqlite:./${project.property('database')}"
+    }
+    generator {
+      name = 'org.jooq.codegen.DefaultGenerator'
+      strategy {
+        name = 'org.jooq.codegen.DefaultGeneratorStrategy'
+      }
+      database {
+        name = 'org.jooq.meta.extensions.ddl.DDLDatabase'
+        properties {
+          property {
+            key = 'scripts'
+            value = 'src/main/resources/db/migration/*'
+          }
+          property {
+            key = 'sort'
+            value = 'semantic'
+          }
+        }
+        
+        inputSchema = 'PUBLIC'
+        outputSchemaToDefault = true
+      }
+      generate {}
+      target {
+        packageName = 'space.nerdsin.plugins.enhancedchat.codegen'
+      }
+    }
+  }
+}
+
+dependencies {
+  compile group: 'org.xerial', name: 'sqlite-jdbc', version: sqliteJdbcVersion
+  jooqRuntime group: 'org.xerial', name: 'sqlite-jdbc', version: sqliteJdbcVersion
+  
+  compile group: 'org.jooq', name: 'jooq'
+  jooqRuntime group: 'org.jooq', name: 'jooq-meta'
+  jooqRuntime group: 'org.jooq', name: 'jooq-meta-extensions'
+  jooqRuntime group: 'org.jooq', name: 'jooq-codegen'
+  
+  compile group: 'org.flywaydb', name: 'flyway-core', version: flywayCoreVersion
+}
+
+processResources {
+  filesMatching('**/config.yml') {
+    filter(org.apache.tools.ant.filters.ReplaceTokens, tokens: [
+        'database.filename' : project.property('database')
+    ]);
+  }
+}

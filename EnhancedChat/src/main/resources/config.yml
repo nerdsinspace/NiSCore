@@ -1,0 +1,12 @@
+database:
+  # Name of the database file that will be used to store player data
+  filename: @database.filename@
+disconnect-memory:
+  # Time (in seconds) to remember a player after they have disconnected from the server
+  # This allows players to ignore other players that keep reconnecting rapidly
+  forget-after: 15
+ignorelist:
+  # Enable the ability for players to ignore other players
+  enabled: true
+  # Size of each page sent to the player when they do /ignorelist
+  page-size: 10
