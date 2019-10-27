@@ -1,0 +1,7 @@
+# Array of commands that should be allow for all non-op players
+whitelist:
+  - help
+# If OP should bypass the controller
+allow-op: true
+# Message sent when a command is blocked
+block-message: Unknown command. Type /help for help.
