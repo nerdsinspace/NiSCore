@@ -12,6 +12,9 @@ commands:
   ignorelist:
     description: Shows a list of people ignored
     usage: /ignorelist [page]
+  kill:
+    description: Suicide
+    usage: /kill
 permissions:
   enhancedchat.*:
     default: false

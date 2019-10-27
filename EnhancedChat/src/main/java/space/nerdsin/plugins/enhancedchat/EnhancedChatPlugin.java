@@ -13,7 +13,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -34,12 +36,16 @@ public class EnhancedChatPlugin extends JavaPlugin implements Listener {
   private boolean ignoreListEnabled = true;
   private int ignoreListPageSize = 10;
   
+  private boolean killEnabled = true;
+  
   @Override
   public void onEnable() {
     saveDefaultConfig();
     
     ignoreListEnabled = getConfig().getBoolean("ignorelist.enabled");
     ignoreListPageSize = getConfig().getInt("ignorelist.page-size");
+    
+    killEnabled = getConfig().getBoolean("kill.enabled");
     
     // load the database
     String filename = Objects.requireNonNull(getConfig().getString("database.filename"),
@@ -73,6 +79,8 @@ public class EnhancedChatPlugin extends JavaPlugin implements Listener {
       
       switch (command.getName().toLowerCase()) {
         case "ignore": {
+          if(!ignoreListEnabled) break;
+          
           if (args.length < 1) {
             // not enough arguments provided
             sender.sendMessage(QuickComponents.forCommandUsage(command.getUsage()));
@@ -114,6 +122,8 @@ public class EnhancedChatPlugin extends JavaPlugin implements Listener {
           return true;
         }
         case "unignore": {
+          if(!ignoreListEnabled) break;
+          
           if (args.length < 1) {
             // not enough arguments provided
             sender.sendMessage(QuickComponents.forCommandUsage(command.getUsage()));
@@ -147,6 +157,8 @@ public class EnhancedChatPlugin extends JavaPlugin implements Listener {
           return true;
         }
         case "ignorelist": {
+          if(!ignoreListEnabled) break;
+          
           int page = 0;
           
           if(args.length > 1) {
@@ -201,6 +213,13 @@ public class EnhancedChatPlugin extends JavaPlugin implements Listener {
                 }
               });
           
+          return true;
+        }
+        case "kill": {
+          if(!killEnabled) break;
+          
+          // kill the player
+          player.setHealth(0.D);
           return true;
         }
       }

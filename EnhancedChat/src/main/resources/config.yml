@@ -10,3 +10,5 @@ ignorelist:
   enabled: true
   # Size of each page sent to the player when they do /ignorelist
   page-size: 10
+kill:
+  enabled: true
