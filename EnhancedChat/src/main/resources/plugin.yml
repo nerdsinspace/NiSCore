@@ -49,4 +49,4 @@ permissions:
     default: true
   space.nerdsin.enhancedchat.whisper:
     description: Allows the user to whisper to other players
-    defaultt: true
+    default: true
