@@ -6,15 +6,47 @@ commands:
   ignore:
     description: Hide a players messages from chat
     usage: /ignore <player name>
+    permission: space.nerdsin.enhancedchat.ignore
   unignore:
     description: Stop ignoring a players messages
     usage: /unignore <player name>
+    permission: space.nerdsin.enhancedchat.ignore
   ignorelist:
     description: Shows a list of people ignored
     usage: /ignorelist [page]
+    permission: space.nerdsin.enhancedchat.ignore
   kill:
     description: Suicide
     usage: /kill
+    permission: space.nerdsin.enhancedchat.kill
+  whisper:
+    description: Private message somebody on the server
+    usage: /whisper <player name> <message>
+    aliases:
+      - w
+      - tell
+      - t
+      - pm
+    permission: space.nerdsin.enhancedchat.whisper
+  reply:
+    description: Reply to last person that sent you a PM
+    usage: /reply <message>
+    aliases:
+      - r
+    permission: space.nerdsin.enhancedchat.whisper
 permissions:
-  enhancedchat.*:
-    default: false
+  space.nerdsin.enhacnedchat.*:
+    description: Access to all EnhancedChat commands
+    children:
+      - space.nerdsin.enhancedchat.ignore
+      - space.nerdsin.enhancedchat.kill
+      - space.nerdsin.enhancedchat.whisper
+  space.nerdsin.enhancedchat.ignore:
+    description: Allows user to ignore people
+    default: true
+  space.nerdsin.enhancedchat.kill:
+    description: Allows user to kill themselves
+    default: true
+  space.nerdsin.enhancedchat.whisper:
+    description: Allows the user to whisper to other players
+    defaultt: true

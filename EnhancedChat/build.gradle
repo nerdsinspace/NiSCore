@@ -19,25 +19,29 @@ apply plugin: 'java'
 apply plugin: 'nu.studer.jooq'
 
 jooq {
+  //noinspection GroovyAssignabilityCheck
   version = jooqVersion
   edition = 'OSS'
-  sqlite(sourceSets.main) {
+  h2(sourceSets.main) {
     jdbc {
-      driver = 'org.sqlite.JDBC'
-      url = "jdbc:sqlite:./${project.property('database')}"
+      driver = 'org.h2.Driver'
+      url = 'jdbc:h2:mem:test'
     }
     generator {
       name = 'org.jooq.codegen.DefaultGenerator'
       strategy {
         name = 'org.jooq.codegen.DefaultGeneratorStrategy'
       }
+      //noinspection GroovyAssignabilityCheck
       database {
         name = 'org.jooq.meta.extensions.ddl.DDLDatabase'
         properties {
+          //noinspection GroovyAssignabilityCheck
           property {
             key = 'scripts'
-            value = 'src/main/resources/db/migration/*'
+            value = 'src/main/resources/db/h2/*'
           }
+          //noinspection GroovyAssignabilityCheck
           property {
             key = 'sort'
             value = 'semantic'
@@ -56,19 +60,26 @@ jooq {
 }
 
 dependencies {
-  compile group: 'org.xerial', name: 'sqlite-jdbc', version: sqliteJdbcVersion
-  jooqRuntime group: 'org.xerial', name: 'sqlite-jdbc', version: sqliteJdbcVersion
-  
+  compileOnly group: 'org.projectlombok', name: 'lombok', version: lombokVersion
+  annotationProcessor group: 'org.projectlombok', name: 'lombok', version: lombokVersion
+
+  compile group: 'com.h2database', name: 'h2', version: h2DatabaseVersion
+  jooqRuntime group: 'com.h2database', name: 'h2', version: h2DatabaseVersion
+
   compile group: 'org.jooq', name: 'jooq'
   jooqRuntime group: 'org.jooq', name: 'jooq-meta'
   jooqRuntime group: 'org.jooq', name: 'jooq-meta-extensions'
   jooqRuntime group: 'org.jooq', name: 'jooq-codegen'
   
   compile group: 'org.flywaydb', name: 'flyway-core', version: flywayCoreVersion
+  
+  compile group: 'com.google.inject', name: 'guice', version: guiceVersion
+  compile group: 'org.reflections', name: 'reflections', version: reflectionsVersion
 }
 
 processResources {
   filesMatching('**/config.yml') {
+    //noinspection UnnecessaryQualifiedReference
     filter(org.apache.tools.ant.filters.ReplaceTokens, tokens: [
         'database.filename' : project.property('database')
     ]);
