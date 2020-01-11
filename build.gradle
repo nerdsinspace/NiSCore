@@ -11,10 +11,13 @@ subprojects {
   ext {
     jooqGradleVersion = '3.0.3'
     jooqVersion = '3.12.1'
+
+    h2DatabaseVersion = '1.4.200'
+    flywayCoreVersion = '6.1.4'
     
-    sqliteJdbcVersion = '3.25.2'
-    
-    flywayCoreVersion = '6.0.7'
+    lombokVersion = '1.18.10'
+    guiceVersion = '4.2.2'
+    reflectionsVersion = '0.9.11'
   }
   
   apply plugin: 'java'
@@ -28,7 +31,7 @@ subprojects {
   
   task copyLibraryJars(type: Copy) {
     from configurations.compile
-    into rootProject.file('jars/libs')
+    into rootProject.file('mcserver/plugins/libs')
   }
   
   build.finalizedBy copyLibraryJars
@@ -43,7 +46,7 @@ subprojects {
         attributes(
             "Class-Path": configurations.compile.collect { "libs/${it.getName()}" }.join(' '))
       }
-      destinationDir rootProject.file('jars')
+      destinationDir rootProject.file('mcserver/plugins')
     }
     
     processResources {
@@ -68,5 +71,12 @@ gradle.buildFinished {
 
 task copyPluginJars(type: Copy, dependsOn: subprojects.jar) {
   from subprojects.jar
-  into project.file('jars')
+  into project.file('mcserver/plugins')
+}
+
+task createServerDirs() {
+  if(project.file('mcserver').mkdir()) {
+    project.file('mcserver/plugins').mkdir();
+    project.file('mcserver/worlds').mkdir();
+  }
 }

@@ -3,5 +3,6 @@
 jars/
 build/
 */build/
+mcserver/
 
 EnhancedChat/*.sqlite
