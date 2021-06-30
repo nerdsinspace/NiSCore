@@ -38,7 +38,7 @@ subprojects {
   
   afterEvaluate {
     dependencies {
-      implementation group: 'com.destroystokyo.paper', name: 'paper-api', version: '1.13.2-R0.1-SNAPSHOT'
+      implementation group: 'com.destroystokyo.paper', name: 'paper-api', version: '1.16.5-R0.1-SNAPSHOT'
     }
   
     jar {

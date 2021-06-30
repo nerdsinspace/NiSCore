@@ -39,7 +39,7 @@ public class SpawnRadiusPlugin extends JavaPlugin implements Listener {
   
   @EventHandler(priority = EventPriority.HIGHEST)
   public void onPlayerRespawn(final PlayerRespawnEvent event) {
-    if(!event.isBedSpawn()) {
+    if(!event.isBedSpawn() && !event.isAnchorSpawn()) {
       Location location = event.getRespawnLocation();
       Location sl = location.getWorld().getSpawnLocation();
       event.setRespawnLocation(randomLocation(sl.getBlockX(), sl.getBlockZ(), location.getWorld()));
