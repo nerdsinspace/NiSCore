@@ -1,12 +1,13 @@
 plugins {
   id 'java'
   id 'nu.studer.jooq' version '5.2.1'
+  id 'com.palantir.git-version' version '0.12.3'
 }
 
 group 'space.nerdsin.plugins'
-version '1.0'
+version gitVersion()
 
-sourceCompatibility = targetCompatibility = JavaVersion.VERSION_11
+sourceCompatibility = targetCompatibility = JavaVersion.VERSION_16
 
 configurations {
   compileJar { }
@@ -97,7 +98,7 @@ task fatJar(type: Jar) {
   archiveBaseName = "$pluginName-FAT"
 
   from {
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    duplicatesStrategy = DuplicatesStrategy.WARN
     configurations.compileJar.collect { it.isDirectory() ? it : zipTree(it) }
   }
 
