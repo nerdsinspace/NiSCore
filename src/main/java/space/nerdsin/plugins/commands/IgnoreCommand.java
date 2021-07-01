@@ -2,17 +2,17 @@ package space.nerdsin.plugins.commands;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import net.md_5.bungee.api.ChatColor;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.entity.Player;
-import space.nerdsin.plugins.config.PluginConfiguration;
-import space.nerdsin.plugins.model.PlayerEntry;
-import space.nerdsin.plugins.services.SchedulerService;
-import space.nerdsin.plugins.services.PlayerService;
 import space.nerdsin.plugins.api.IPluginCommand;
 import space.nerdsin.plugins.api.QuickComponents;
-import space.nerdsin.plugins.api.TextBuilder;
+import space.nerdsin.plugins.config.PluginConfiguration;
+import space.nerdsin.plugins.model.PlayerEntry;
+import space.nerdsin.plugins.services.PlayerService;
+import space.nerdsin.plugins.services.SchedulerService;
 
 import java.util.Collections;
 import java.util.List;
@@ -21,11 +21,11 @@ import java.util.stream.Stream;
 
 @Singleton
 public class IgnoreCommand implements IPluginCommand {
-  
+
   private final PluginConfiguration config;
   private final PlayerService players;
   private final SchedulerService scheduler;
-  
+
   @Inject
   public IgnoreCommand(PluginConfiguration config,
       PlayerService players,
@@ -34,7 +34,7 @@ public class IgnoreCommand implements IPluginCommand {
     this.players = players;
     this.scheduler = scheduler;
   }
-  
+
   @Override
   public void onExecute(Player sender, Command command, String label, String[] args) {
     if (args.length < 1) {
@@ -42,14 +42,14 @@ public class IgnoreCommand implements IPluginCommand {
       sender.sendMessage(QuickComponents.forCommandUsage(command.getUsage()));
     } else {
       String un = args[0];
-      
-      if(un.isEmpty() || un.length() > config.getUsernameMaxLength()) {
+
+      if (un.isEmpty() || un.length() > config.getUsernameMaxLength()) {
         // username is too short or too long
         sender.sendMessage(QuickComponents.error("Invalid username."));
       } else {
         final PlayerEntry self = players.getPlayerByUuid(sender.getUniqueId());
 
-        if(self == null) {
+        if (self == null) {
           // something is broken in the code logic
           sender.sendMessage(QuickComponents.unexpectedError(config.getLogger(), "::getPlayerByUuid is null"));
         } else {
@@ -69,18 +69,16 @@ public class IgnoreCommand implements IPluginCommand {
                 .thenAccept(added -> {
                   if (!added) {
                     // the insert failed, so a matching entry must already exist
-                    sender.sendMessage(TextBuilder.builder()
-                        .color(ChatColor.RED)
-                        .usernameText(target.getUsername())
-                        .text(" is already ignored.")
-                        .done());
+                    sender.sendMessage(Component.text()
+                        .color(NamedTextColor.RED)
+                        .append(QuickComponents.forUsername(target.getUsername()))
+                        .append(Component.text(" is already ignored")));
                   } else {
                     // the player has been successfully ignored
-                    sender.sendMessage(TextBuilder.builder()
-                        .color(ChatColor.GRAY)
-                        .usernameText(target.getUsername())
-                        .text(" ignored.")
-                        .done());
+                    sender.sendMessage(Component.text()
+                        .color(NamedTextColor.GRAY)
+                        .append(QuickComponents.forUsername(target.getUsername()))
+                        .append(Component.text(" ignored")));
                   }
                 });
           }
@@ -91,7 +89,7 @@ public class IgnoreCommand implements IPluginCommand {
 
   @Override
   public List<String> onTabCompletion(Player player, Command command, String alias, String[] args) {
-    if(args.length > 1) {
+    if (args.length > 1) {
       return Collections.emptyList();
     } else {
       final String arg = args[0].toLowerCase();
@@ -110,7 +108,7 @@ public class IgnoreCommand implements IPluginCommand {
   public String getCommand() {
     return "ignore";
   }
-  
+
   @Override
   public boolean isEnabled() {
     return config.isIgnoreListEnabled();
