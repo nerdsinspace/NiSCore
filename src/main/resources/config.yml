@@ -1,0 +1,92 @@
+database:
+  # SQL dialect to use (supports: H2)
+  dialect: H2
+  # Connection mode. Can be file, mem, tcp, ssl, zip, ...
+  # See https://h2database.com/html/features.html#connection_modes for all possible modes
+  mode: 'file'
+  # The connection to the database. This can be a file path, or a remote address.
+  # Use {FILENAME} token to replace using filename option
+  connection: '{FILENAME}'
+  # Extra data to be appended to the URL
+  extra: ''
+  # Database username
+  username: 'user'
+  # Database password
+  password: 'pass'
+  # Name of the database file that will be used to store player data
+  filename: @database.filename@
+
+disconnect-memory:
+  # Time (in seconds) to remember a player after they have disconnected from the server
+  # This allows players to ignore other players that keep reconnecting rapidly
+  forget-after: 15
+
+ignorelist:
+  # Enable the ability for players to ignore other players
+  enabled: true
+  # Size of each page sent to the player when they do /ignorelist
+  page-size: 10
+
+kill:
+  enabled: true
+
+whisper:
+  enabled: true
+
+permissions:
+  enabled: true
+  defaults:
+    - space.nerdsin.enhancedchat.*
+    - bukkit.command.tps
+
+spawn-radius:
+  # The X axis that a custom world spawn should originate from
+  # Default: 0
+  x: 0
+  # The Z axis that a custom world spawn should originate from
+  # Default: 0
+  z: 0
+  # The radius of the random player spawns
+  # Default: 128
+  radius: 128
+  # Number of attempts to make to find solid ground
+  # Useful if spawn has a lot of water or non-walkable surfaces in it
+  # Default: 16
+  attempts: 16
+  # If the world should keep its original spawn point
+  # Default: false
+  original: false
+
+nether-control:
+  # The maximum height (inclusive) a player can be in the nether before being setback
+  # Default: 128
+  max-height: 128
+  # Amount of damage to apply to a player if the mode is set to damage
+  # Default: 4.0
+  damage: 4.0
+  # Punishment mode for hitting maximum height. Has 3 different options
+  #   SETBACK   - Sets the player back
+  #   DAMAGE    - Hurts the player
+  #   KILL      - Kills the player instantly
+  # Default: SETBACK
+  mode: SETBACK
+  # If this should only be enforced on players in survival mode
+  # Default: true
+  survival-only: true
+  # If this should be enforced on OP players
+  # Default: false
+  include-ops: false
+
+game-rules:
+  announceAdvancements: false
+  showDeathMessages: true
+
+chat-control:
+  # Permissions that are allowed on this server
+  whitelisted-permissions:
+    - space.nerdsin.*
+    - bukkit.command.tps
+  # If OP should bypass the controller
+  allow-op: true
+  # Message sent when a command is blocked
+  block-message: Unknown command. Type "/help" for help.

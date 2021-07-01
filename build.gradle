@@ -1,82 +1,133 @@
 plugins {
   id 'java'
+  id 'nu.studer.jooq' version '5.2.1'
 }
 
 group 'space.nerdsin.plugins'
 version '1.0'
 
-sourceCompatibility = 1.8
+sourceCompatibility = targetCompatibility = JavaVersion.VERSION_11
 
-subprojects {
-  ext {
-    jooqGradleVersion = '3.0.3'
-    jooqVersion = '3.12.1'
+configurations {
+  compileJar { }
 
-    h2DatabaseVersion = '1.4.200'
-    flywayCoreVersion = '6.1.4'
-    
-    lombokVersion = '1.18.10'
-    guiceVersion = '4.2.2'
-    reflectionsVersion = '0.9.11'
-  }
-  
-  apply plugin: 'java'
-  
-  repositories {
-    mavenCentral()
-    maven {
-      url 'https://papermc.io/repo/repository/maven-public/'
-    }
-  }
-  
-  task copyLibraryJars(type: Copy) {
-    from configurations.compile
-    into rootProject.file('mcserver/plugins/libs')
-  }
-  
-  build.finalizedBy copyLibraryJars
-  
-  afterEvaluate {
-    dependencies {
-      implementation group: 'com.destroystokyo.paper', name: 'paper-api', version: '1.16.5-R0.1-SNAPSHOT'
-    }
-  
-    jar {
-      manifest {
-        attributes(
-            "Class-Path": configurations.compile.collect { "libs/${it.getName()}" }.join(' '))
-      }
-      destinationDir rootProject.file('mcserver/plugins')
-    }
-    
-    processResources {
-      filesMatching('**/plugin.yml') {
-        filter(org.apache.tools.ant.filters.ReplaceTokens, tokens: [
-            'name'      : project.hasProperty('pretty-name')
-                ? project.property('pretty-name') : project.name,
-            'class'     : project.property('main'),
-            'version'   : project.version,
-            'apiversion': project.property('apiversion')
-        ]);
+  compileClasspath.extendsFrom compileJar
+  runtimeClasspath.extendsFrom compileJar
+}
+
+jooq {
+  version = jooqVersion
+
+  configurations {
+    main {
+      generationTool {
+        jdbc {
+          driver = 'org.h2.Driver'
+          url = 'jdbc:h2:mem:'
+        }
+        generator {
+          name = 'org.jooq.codegen.DefaultGenerator'
+          strategy {
+            name = 'org.jooq.codegen.DefaultGeneratorStrategy'
+          }
+          //noinspection GroovyAssignabilityCheck
+          database {
+            name = 'org.jooq.meta.extensions.ddl.DDLDatabase'
+            properties {
+              //noinspection GroovyAssignabilityCheck
+              property {
+                key = 'scripts'
+                value = 'src/main/resources/db/h2/*'
+              }
+              //noinspection GroovyAssignabilityCheck
+              property {
+                key = 'sort'
+                value = 'semantic'
+              }
+            }
+
+            inputSchema = 'PUBLIC'
+            outputSchemaToDefault = true
+          }
+          generate {}
+          target {
+            packageName = 'space.nerdsin.plugins.codegen'
+          }
+        }
       }
     }
   }
 }
 
-sourceSets {}
-
-gradle.buildFinished {
-  project.buildDir.deleteDir()
+repositories {
+  mavenCentral()
+  maven { url = 'https://papermc.io/repo/repository/maven-public/' }
 }
 
-task copyPluginJars(type: Copy, dependsOn: subprojects.jar) {
-  from subprojects.jar
-  into project.file('mcserver/plugins')
+dependencies {
+  implementation group: 'com.destroystokyo.paper', name: 'paper-api', version: paperApiVersion
+
+  compileOnly group: 'org.projectlombok', name: 'lombok', version: lombokVersion
+  annotationProcessor group: 'org.projectlombok', name: 'lombok', version: lombokVersion
+
+  compileJar group: 'com.h2database', name: 'h2', version: h2DatabaseVersion
+  jooqGenerator group: 'com.h2database', name: 'h2', version: h2DatabaseVersion
+
+  compileJar group: 'org.jooq', name: 'jooq'
+  jooqGenerator group: 'org.jooq', name: 'jooq-meta'
+  jooqGenerator group: 'org.jooq', name: 'jooq-meta-extensions'
+  jooqGenerator group: 'org.jooq', name: 'jooq-codegen'
+
+  compileJar group: 'org.flywaydb', name: 'flyway-core', version: flywayCoreVersion
+
+  compileJar group: 'com.google.inject', name: 'guice', version: guiceVersion
+  compileJar group: 'org.reflections', name: 'reflections', version: reflectionsVersion
 }
 
-task createServerDirs() {
-  if(project.file('mcserver').mkdir()) {
-    project.file('mcserver/plugins').mkdir();
-    project.file('mcserver/worlds').mkdir();
+jar {
+  archiveBaseName = "$pluginName-SLIM"
+
+  //noinspection GroovyAssignabilityCheck
+  manifest {
+    attributes("Class-Path": configurations.compileJar.collect { "libs/${it.getName()}" }.join(' '))
+  }
+}
+
+task fatJar(type: Jar) {
+  archiveBaseName = "$pluginName-FAT"
+
+  from {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    configurations.compileJar.collect { it.isDirectory() ? it : zipTree(it) }
+  }
+
+  finalizedBy task("copyLibs", type: Copy) {
+    from configurations.compileJar
+    into tasks.fatJar.destinationDirectory.dir("libs")
+  }
+
+  with jar
+}
+
+artifacts {
+  archives fatJar
+}
+
+processResources {
+  filesMatching('**/plugin.yml') {
+    //noinspection UnnecessaryQualifiedReference
+    filter(org.apache.tools.ant.filters.ReplaceTokens, tokens: [
+        'name'      : pluginName ?: project.name,
+        'class'     : pluginClass,
+        'version'   : project.version,
+        'apiversion': pluginApiVersion
+    ]);
+  }
+
+  filesMatching('**/config.yml') {
+    //noinspection UnnecessaryQualifiedReference
+    filter(org.apache.tools.ant.filters.ReplaceTokens, tokens: [
+        'database.filename': databaseFileName
+    ]);
   }
 }

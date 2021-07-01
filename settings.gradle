@@ -1,7 +1,1 @@
 rootProject.name = 'plugins'
-include 'SpawnRadius'
-include 'NoNetherRoof'
-include 'GameRuleEnforcer'
-include 'ChatController'
-include 'EnhancedChat'
-

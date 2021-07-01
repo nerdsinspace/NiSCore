@@ -1,8 +1,0 @@
-# Permissions that are allowed on this server
-whitelisted-permissions:
-  - space.nerdsin.*
-  - bukkit.command.tps
-# If OP should bypass the controller
-allow-op: true
-# Message sent when a command is blocked
-block-message: Unknown command. Type "/help" for help.
