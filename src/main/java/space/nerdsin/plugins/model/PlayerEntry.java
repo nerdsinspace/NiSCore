@@ -10,7 +10,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionAttachment;
-import space.nerdsin.plugins.util.IServiceProvider;
+import space.nerdsin.plugins.api.IServiceProvider;
 
 @Getter
 @Setter

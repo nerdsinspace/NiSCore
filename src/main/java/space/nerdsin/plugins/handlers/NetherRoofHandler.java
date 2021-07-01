@@ -14,7 +14,7 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.spigotmc.event.entity.EntityMountEvent;
 import space.nerdsin.plugins.config.NetherControlConfiguration;
-import space.nerdsin.plugins.util.IPluginListener;
+import space.nerdsin.plugins.api.IPluginListener;
 
 import java.util.logging.Logger;
 

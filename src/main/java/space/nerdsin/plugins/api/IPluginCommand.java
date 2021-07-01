@@ -1,4 +1,4 @@
-package space.nerdsin.plugins.util;
+package space.nerdsin.plugins.api;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;

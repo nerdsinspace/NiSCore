@@ -11,8 +11,8 @@ import space.nerdsin.plugins.event.PlayerHandleExpiredEvent;
 import space.nerdsin.plugins.model.PlayerEntry;
 import space.nerdsin.plugins.services.SchedulerService;
 import space.nerdsin.plugins.services.PlayerService;
-import space.nerdsin.plugins.util.IPluginListener;
-import space.nerdsin.plugins.util.QuickComponents;
+import space.nerdsin.plugins.api.IPluginListener;
+import space.nerdsin.plugins.api.QuickComponents;
 
 @Singleton
 public class IgnoreChatHandler implements IPluginListener {

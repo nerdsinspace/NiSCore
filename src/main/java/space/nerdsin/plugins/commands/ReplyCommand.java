@@ -8,8 +8,8 @@ import space.nerdsin.plugins.config.PluginConfiguration;
 import space.nerdsin.plugins.model.PlayerEntry;
 import space.nerdsin.plugins.model.PlayerUUID;
 import space.nerdsin.plugins.services.PlayerService;
-import space.nerdsin.plugins.util.IPluginCommand;
-import space.nerdsin.plugins.util.QuickComponents;
+import space.nerdsin.plugins.api.IPluginCommand;
+import space.nerdsin.plugins.api.QuickComponents;
 
 @Singleton
 public class ReplyCommand implements IPluginCommand {

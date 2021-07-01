@@ -7,7 +7,7 @@ import space.nerdsin.plugins.event.PlayerConnectedEvent;
 import space.nerdsin.plugins.services.PlayerService;
 import space.nerdsin.plugins.services.SchedulerService;
 import space.nerdsin.plugins.services.WhisperService;
-import space.nerdsin.plugins.util.IPluginListener;
+import space.nerdsin.plugins.api.IPluginListener;
 
 @Singleton
 public class WhisperChatHandler implements IPluginListener {

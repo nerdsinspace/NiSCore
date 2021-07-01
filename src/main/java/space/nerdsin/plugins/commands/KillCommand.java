@@ -5,7 +5,7 @@ import com.google.inject.Singleton;
 import org.bukkit.command.Command;
 import org.bukkit.entity.Player;
 import space.nerdsin.plugins.config.PluginConfiguration;
-import space.nerdsin.plugins.util.IPluginCommand;
+import space.nerdsin.plugins.api.IPluginCommand;
 
 @Singleton
 public class KillCommand implements IPluginCommand {

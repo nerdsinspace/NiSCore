@@ -8,7 +8,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import space.nerdsin.plugins.config.SpawnRadiusConfiguration;
-import space.nerdsin.plugins.util.IPluginListener;
+import space.nerdsin.plugins.api.IPluginListener;
 
 import java.util.concurrent.ThreadLocalRandom;
 

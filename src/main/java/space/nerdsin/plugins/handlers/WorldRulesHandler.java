@@ -5,7 +5,7 @@ import com.google.inject.Singleton;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.world.WorldLoadEvent;
 import space.nerdsin.plugins.config.GameRuleConfiguration;
-import space.nerdsin.plugins.util.IPluginListener;
+import space.nerdsin.plugins.api.IPluginListener;
 
 @Singleton
 public class WorldRulesHandler implements IPluginListener {

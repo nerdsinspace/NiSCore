@@ -7,7 +7,7 @@ import space.nerdsin.plugins.config.PluginConfiguration;
 import space.nerdsin.plugins.event.PlayerConnectedEvent;
 import space.nerdsin.plugins.event.PlayerDisconnectedEvent;
 import space.nerdsin.plugins.model.PlayerEntry;
-import space.nerdsin.plugins.util.IPluginListener;
+import space.nerdsin.plugins.api.IPluginListener;
 
 @Singleton
 public class PermissionHandler implements IPluginListener {

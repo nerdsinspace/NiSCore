@@ -20,7 +20,7 @@ import space.nerdsin.plugins.event.PlayerConnectedEvent;
 import space.nerdsin.plugins.event.PlayerDisconnectedEvent;
 import space.nerdsin.plugins.event.PlayerHandleExpiredEvent;
 import space.nerdsin.plugins.model.PlayerEntry;
-import space.nerdsin.plugins.util.IServiceProvider;
+import space.nerdsin.plugins.api.IServiceProvider;
 
 @Singleton
 public class PlayerService implements IServiceProvider {

@@ -6,8 +6,8 @@ import org.bukkit.command.PluginCommand;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 import space.nerdsin.plugins.services.PluginInitializeService;
-import space.nerdsin.plugins.util.IPluginCommand;
-import space.nerdsin.plugins.util.IPluginListener;
+import space.nerdsin.plugins.api.IPluginCommand;
+import space.nerdsin.plugins.api.IPluginListener;
 
 public class PluginCore extends JavaPlugin implements Listener {
   

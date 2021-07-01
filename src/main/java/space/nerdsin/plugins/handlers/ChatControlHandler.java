@@ -12,7 +12,7 @@ import org.bukkit.event.player.PlayerCommandSendEvent;
 import org.bukkit.event.server.TabCompleteEvent;
 import org.bukkit.permissions.Permissible;
 import space.nerdsin.plugins.config.ChatControlConfiguration;
-import space.nerdsin.plugins.util.IPluginListener;
+import space.nerdsin.plugins.api.IPluginListener;
 
 import java.util.List;
 import java.util.stream.Collectors;

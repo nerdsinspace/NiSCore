@@ -12,7 +12,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import space.nerdsin.plugins.services.SchedulerService;
 import space.nerdsin.plugins.services.GeneralPlayerService;
 import space.nerdsin.plugins.services.PlayerService;
-import space.nerdsin.plugins.util.IPluginListener;
+import space.nerdsin.plugins.api.IPluginListener;
 
 @Singleton
 public class JoinLeaveHandler implements IPluginListener {

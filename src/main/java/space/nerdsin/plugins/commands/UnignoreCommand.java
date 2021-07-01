@@ -9,9 +9,9 @@ import space.nerdsin.plugins.config.PluginConfiguration;
 import space.nerdsin.plugins.model.PlayerEntry;
 import space.nerdsin.plugins.services.SchedulerService;
 import space.nerdsin.plugins.services.PlayerService;
-import space.nerdsin.plugins.util.IPluginCommand;
-import space.nerdsin.plugins.util.QuickComponents;
-import space.nerdsin.plugins.util.TextBuilder;
+import space.nerdsin.plugins.api.IPluginCommand;
+import space.nerdsin.plugins.api.QuickComponents;
+import space.nerdsin.plugins.api.TextBuilder;
 
 @Singleton
 public class UnignoreCommand implements IPluginCommand {

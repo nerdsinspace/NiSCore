@@ -1,4 +1,4 @@
-package space.nerdsin.plugins.util;
+package space.nerdsin.plugins.api;
 
 import space.nerdsin.plugins.services.IgnoringService;
 import space.nerdsin.plugins.services.PlayerService;
