@@ -6,11 +6,12 @@ plugins {
 
 group 'space.nerdsin.plugins'
 version gitVersion()
+archivesBaseName = "$pluginName"
 
 sourceCompatibility = targetCompatibility = JavaVersion.VERSION_16
 
 configurations {
-  compileJar { }
+  compileJar {}
 
   compileClasspath.extendsFrom compileJar
   runtimeClasspath.extendsFrom compileJar
@@ -86,7 +87,7 @@ dependencies {
 }
 
 jar {
-  archiveBaseName = "$pluginName-SLIM"
+  archiveBaseName = "$archivesBaseName-SLIM"
 
   //noinspection GroovyAssignabilityCheck
   manifest {
@@ -95,7 +96,7 @@ jar {
 }
 
 task fatJar(type: Jar) {
-  archiveBaseName = "$pluginName-FAT"
+  archiveBaseName = "$archivesBaseName-FAT"
 
   from {
     duplicatesStrategy = DuplicatesStrategy.WARN
@@ -118,9 +119,11 @@ processResources {
   filesMatching('**/plugin.yml') {
     //noinspection UnnecessaryQualifiedReference
     filter(org.apache.tools.ant.filters.ReplaceTokens, tokens: [
-        'name'      : pluginName ?: project.name,
+        'name'      : archivesBaseName,
         'class'     : pluginClass,
-        'version'   : project.version,
+        'version'   : (project.version =~ /v([\d]+\.[\d]+\.[\d]+).*/)
+            .with { it[0] }
+            .with { m, ver -> ver },
         'apiversion': pluginApiVersion
     ]);
   }
