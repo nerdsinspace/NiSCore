@@ -67,7 +67,7 @@ public class WhisperCommand implements IPluginCommand {
   }
 
   public void sendWhisper(PlayerEntry sender, PlayerEntry receiver, String message) {
-    var msg = (" " + message).trim();
+    var msg = (" " + message.trim());
 
     // sender should always receive this message
     sender.getPlayer().sendMessage(Component.text()
