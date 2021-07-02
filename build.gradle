@@ -93,6 +93,11 @@ jar {
   manifest {
     attributes("Class-Path": configurations.compileJar.collect { "libs/${it.getName()}" }.join(' '))
   }
+
+  finalizedBy task("copyLibs", type: Copy) {
+    from configurations.compileJar
+    into tasks.jar.destinationDirectory.dir("libs")
+  }
 }
 
 task fatJar(type: Jar) {
@@ -101,11 +106,6 @@ task fatJar(type: Jar) {
   from {
     duplicatesStrategy = DuplicatesStrategy.WARN
     configurations.compileJar.collect { it.isDirectory() ? it : zipTree(it) }
-  }
-
-  finalizedBy task("copyLibs", type: Copy) {
-    from configurations.compileJar
-    into tasks.fatJar.destinationDirectory.dir("libs")
   }
 
   with jar
