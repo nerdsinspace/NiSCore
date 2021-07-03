@@ -1,14 +1,11 @@
-version: '3.7'
-
+version: '2.4'
 services:
-  mcserver:
-    container_name: 'mcserver'
-    image: 'mcserver'
-    build:
-      context: .
-      dockerfile: Dockerfile
-    ports:
-    - "25565:25565"
+  niscore-build:
+    container_name: niscore-build
+    image: adoptopenjdk/openjdk16
+    working_dir: /opt/build
+    entrypoint: bash -c "chmod +x ./gradlew && ./gradlew clean build"
+    environment:
+      GRADLE_USER_HOME: /opt/build/.gradle/caches
     volumes:
-    - ./mcserver/plugins:/opt/minecraft/plugins
-    - ./mcserver/worlds:/opt/minecraft/worlds
+      - .:/opt/build:Z
