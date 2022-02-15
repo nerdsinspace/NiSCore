@@ -1,0 +1,42 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - 'master'
+    tags:
+      - 'v*'
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Caches Gradle dependencies and wrappers
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.gradle/caches/modules-2
+            ~/.gradle/wrapper/dists
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle', '**/libs.versions.toml', '**/gradle/wrapper/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      - name: Run cibuild script
+        id: exec
+        run: ./scripts/cibuild
+
+      - name: Cleanup Gradle Cache
+        run: |
+          sudo rm -f ~/.gradle/caches/modules-2/modules-2.lock
+          sudo rm -f ~/.gradle/caches/modules-2/gc.properties
+
+      - name: Create release if this is a tagged workflow
+        uses: ncipollo/release-action@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          artifacts: build/libs/${{ steps.exec.outputs.slimjar }},build/libs/${{ steps.exec.outputs.libszip }},build/libs/${{ steps.exec.outputs.fatjar }}
+          name: NiSCore ${{ steps.exec.outputs.version }}
+          token: ${{ secrets.GITHUB_TOKEN }}

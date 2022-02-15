@@ -1,1 +1,22 @@
+pluginManagement {
+  repositories {
+    gradlePluginPortal()
+  }
+}
+
+enableFeaturePreview 'VERSION_CATALOGS'
+
+dependencyResolutionManagement {
+  repositories {
+    mavenCentral()
+    maven { url = 'https://papermc.io/repo/repository/maven-public/' }
+  }
+
+  versionCatalogs {
+    libs {
+      from files('libs.versions.toml')
+    }
+  }
+}
+
 rootProject.name = 'plugins'

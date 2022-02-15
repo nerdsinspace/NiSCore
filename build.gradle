@@ -1,14 +1,22 @@
 plugins {
   id 'java'
-  id 'nu.studer.jooq' version '5.2.1'
-  id 'com.palantir.git-version' version '0.12.3'
+  alias libs.plugins.jooqgradle
+  alias libs.plugins.gitgradle
 }
 
+final git = versionDetails()
+
 group 'space.nerdsin.plugins'
-version gitVersion()
+version "${git.lastTag.substring(1)}.r${git.commitDistance}"
 archivesBaseName = "$pluginName"
 
-sourceCompatibility = targetCompatibility = JavaVersion.VERSION_16
+final isCiBuilding = System.getenv().get('CI') == 'true'
+
+java {
+  toolchain {
+    languageVersion = JavaLanguageVersion.of(17)
+  }
+}
 
 configurations {
   compileJar {}
@@ -18,7 +26,7 @@ configurations {
 }
 
 jooq {
-  version = jooqVersion
+  version = libs.versions.jooq
 
   configurations {
     main {
@@ -62,29 +70,21 @@ jooq {
   }
 }
 
-repositories {
-  mavenCentral()
-  maven { url = 'https://papermc.io/repo/repository/maven-public/' }
-}
-
 dependencies {
-  implementation group: 'com.destroystokyo.paper', name: 'paper-api', version: paperApiVersion
+  implementation libs.paperapi
 
-  compileOnly group: 'org.projectlombok', name: 'lombok', version: lombokVersion
-  annotationProcessor group: 'org.projectlombok', name: 'lombok', version: lombokVersion
+  compileOnly libs.lombok
+  annotationProcessor libs.lombok
 
-  compileJar group: 'com.h2database', name: 'h2', version: h2DatabaseVersion
-  jooqGenerator group: 'com.h2database', name: 'h2', version: h2DatabaseVersion
+  compileJar libs.h2
 
-  compileJar group: 'org.jooq', name: 'jooq'
-  jooqGenerator group: 'org.jooq', name: 'jooq-meta'
-  jooqGenerator group: 'org.jooq', name: 'jooq-meta-extensions'
-  jooqGenerator group: 'org.jooq', name: 'jooq-codegen'
+  compileJar libs.jooq
+  jooqGenerator libs.bundles.jooqgen
 
-  compileJar group: 'org.flywaydb', name: 'flyway-core', version: flywayCoreVersion
+  compileJar libs.flyway
 
-  compileJar group: 'com.google.inject', name: 'guice', version: guiceVersion
-  compileJar group: 'org.reflections', name: 'reflections', version: reflectionsVersion
+  compileJar libs.guice
+  compileJar libs.reflections
 }
 
 jar {
@@ -95,9 +95,16 @@ jar {
     attributes("Class-Path": configurations.compileJar.collect { "libs/${it.getName()}" }.join(' '))
   }
 
-  finalizedBy task("copyLibs", type: Copy) {
+//  finalizedBy task("copyLibs", type: Copy) {
+//    from configurations.compileJar
+//    into tasks.jar.destinationDirectory.dir("libs")
+//  }
+
+  finalizedBy task("zipLibs", type: Zip) {
+    archiveBaseName = "$archivesBaseName-libs"
+    destinationDirectory = tasks.jar.destinationDirectory
+
     from configurations.compileJar
-    into tasks.jar.destinationDirectory.dir("libs")
   }
 }
 
@@ -122,9 +129,7 @@ processResources {
     filter(org.apache.tools.ant.filters.ReplaceTokens, tokens: [
         'name'      : archivesBaseName,
         'class'     : pluginClass,
-        'version'   : (project.version =~ /v([\d]+\.[\d]+\.[\d]+).*/)
-            .with { it[0] }
-            .with { m, ver -> ver },
+        'version'   : git.lastTag.substring(1),
         'apiversion': pluginApiVersion
     ]);
   }
@@ -135,4 +140,18 @@ processResources {
         'database.filename': databaseFileName
     ]);
   }
+}
+
+task createGitHubActionsVars() {
+  onlyIf { isCiBuilding }
+  doFirst {
+    println "::set-output name=slimjar::${jar.archiveFileName.get()}"
+    println "::set-output name=libszip::${tasks.zipLibs.archiveFileName.get()}"
+    println "::set-output name=fatjar::${fatJar.archiveFileName.get()}"
+    println "::set-output name=version::${project.version}"
+  }
+}
+
+build {
+  finalizedBy createGitHubActionsVars
 }

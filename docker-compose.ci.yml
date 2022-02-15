@@ -1,0 +1,15 @@
+version: '2.4'
+
+services:
+  gradle:
+    image: eclipse-temurin:17.0.2_8-jdk-focal
+    environment:
+      - CI=${CI:-}
+    volumes:
+      # gradle caches
+      - ~/.gradle/caches/modules-2:/root/.gradle/caches/modules-2:z
+      - ~/.gradle/wrapper/dists:/root/.gradle/wrapper/dists:z
+      # mount working directory
+      - ./:/opt/build:Z
+    working_dir: /opt/build
+    command: bash -c 'set -x && ./gradlew --no-daemon clean build --stacktrace'

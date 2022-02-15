@@ -1,0 +1,27 @@
+[versions]
+paper-api = "1.18.1-R0.1-SNAPSHOT"
+jooq = "3.16.4"
+h2 = "2.1.210"
+flyway = "8.5.0"
+lombok = "1.18.22"
+guice = "5.1.0"
+reflections = "0.10.2"
+
+[libraries]
+paperapi = { group = "io.papermc.paper", name = "paper-api", version.ref = "paper-api" }
+lombok = { group = "org.projectlombok", name = "lombok", version.ref = "lombok" }
+h2 = { group = "com.h2database", name = "h2", version.ref = "h2" }
+jooq = { group = "org.jooq", name = "jooq", version.ref = "jooq" }
+jooqmeta = { group = "org.jooq", name = "jooq-meta", version.ref = "jooq" }
+jooqmetaext = { group = "org.jooq", name = "jooq-meta-extensions", version.ref = "jooq" }
+jooqcodegen = { group = "org.jooq", name = "jooq-codegen", version.ref = "jooq" }
+flyway = { group = "org.flywaydb", name = "flyway-core", version.ref = "flyway" }
+guice = { group = "com.google.inject", name = "guice", version.ref = "guice" }
+reflections = { group = "org.reflections", name = "reflections", version.ref = "reflections" }
+
+[bundles]
+jooqgen = ["jooqmeta", "jooqmetaext", "jooqcodegen", "h2"]
+
+[plugins]
+jooqgradle = { id = "nu.studer.jooq", version = "5.2.1" }
+gitgradle = { id = "com.palantir.git-version", version = "0.12.3" }
