@@ -33,10 +33,17 @@ jobs:
           sudo rm -f ~/.gradle/caches/modules-2/modules-2.lock
           sudo rm -f ~/.gradle/caches/modules-2/gc.properties
 
+      - name: Rename build files
+        working-directory: build/libs
+        run: |
+          mv ${{ steps.exec.outputs.slimjar }} NiSCore-SLIM.jar
+          mv ${{ steps.exec.outputs.libszip }} NiSCore-libs.zip
+          mv ${{ steps.exec.outputs.fatjar }} NiSCore-FAT.jar
+
       - name: Create release if this is a tagged workflow
         uses: ncipollo/release-action@v1
         if: startsWith(github.ref, 'refs/tags/')
         with:
-          artifacts: build/libs/${{ steps.exec.outputs.slimjar }},build/libs/${{ steps.exec.outputs.libszip }},build/libs/${{ steps.exec.outputs.fatjar }}
+          artifacts: build/libs/NiSCore-SLIM.jar,build/libs/NiSCore-libs.zip,build/libs/NiSCore-FAT.jar
           name: NiSCore ${{ steps.exec.outputs.version }}
           token: ${{ secrets.GITHUB_TOKEN }}
