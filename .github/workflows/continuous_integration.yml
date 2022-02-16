@@ -35,10 +35,7 @@ jobs:
 
       - name: Rename build files
         run: |
-          ls -lah .
-          echo !!!!
           pushd build/libs
-          ls -lah .
           cp ${{ steps.exec.outputs.slimjar }} NiSCore-SLIM.jar
           cp ${{ steps.exec.outputs.libszip }} NiSCore-libs.zip
           cp ${{ steps.exec.outputs.fatjar }} NiSCore-FAT.jar
