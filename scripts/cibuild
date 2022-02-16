@@ -17,6 +17,10 @@ if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
   if [[ "${1:-}" == "--help" ]]; then
     usage
   else
+    # do this instead of ./gradlew clean
+    rm -rf build/
+    # create directory in this script so docker doesn't create
+    # the directory with root perms instead
     mkdir -p build/libs
 
     # if mounting the hosts cache folder, gradle inside the container will try and

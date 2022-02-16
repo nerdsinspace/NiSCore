@@ -13,5 +13,5 @@ services:
       - ./:/opt/build:Z
     working_dir: /opt/build
     command: bash -c 'set -x 
-      && ./gradlew --no-daemon clean build --stacktrace 
+      && ./gradlew --no-daemon build --stacktrace 
       && chmod a+rw build/libs/*'
