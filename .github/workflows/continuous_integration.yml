@@ -36,9 +36,9 @@ jobs:
       - name: Rename build files
         run: |
           pushd build/libs
-          mv ${{ steps.exec.outputs.slimjar }} NiSCore-SLIM.jar
-          mv ${{ steps.exec.outputs.libszip }} NiSCore-libs.zip
-          mv ${{ steps.exec.outputs.fatjar }} NiSCore-FAT.jar
+          cp ${{ steps.exec.outputs.slimjar }} NiSCore-SLIM.jar
+          cp ${{ steps.exec.outputs.libszip }} NiSCore-libs.zip
+          cp ${{ steps.exec.outputs.fatjar }} NiSCore-FAT.jar
           popd
 
       - name: Create release if this is a tagged workflow
