@@ -12,4 +12,6 @@ services:
       # mount working directory
       - ./:/opt/build:Z
     working_dir: /opt/build
-    command: bash -c 'set -x && ./gradlew --no-daemon clean build --stacktrace'
+    command: bash -c 'set -x 
+      && ./gradlew --no-daemon clean build --stacktrace 
+      && chmod a+rw build/libs/*'
