@@ -34,11 +34,12 @@ jobs:
           sudo rm -f ~/.gradle/caches/modules-2/gc.properties
 
       - name: Rename build files
-        working-directory: build/libs
         run: |
+          pushd build/libs
           mv ${{ steps.exec.outputs.slimjar }} NiSCore-SLIM.jar
           mv ${{ steps.exec.outputs.libszip }} NiSCore-libs.zip
           mv ${{ steps.exec.outputs.fatjar }} NiSCore-FAT.jar
+          popd
 
       - name: Create release if this is a tagged workflow
         uses: ncipollo/release-action@v1
