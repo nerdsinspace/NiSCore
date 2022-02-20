@@ -100,9 +100,11 @@ jar {
 //    into tasks.jar.destinationDirectory.dir("libs")
 //  }
 
-  finalizedBy task("zipLibs", type: Zip) {
+  finalizedBy task("tarLibs", type: Tar) {
     archiveBaseName = "$archivesBaseName-libs"
+    archiveExtension = "tar.gz"
     destinationDirectory = tasks.jar.destinationDirectory
+    compression = org.gradle.api.tasks.bundling.Compression.GZIP
 
     from configurations.compileJar
   }
@@ -146,7 +148,7 @@ task createGitHubActionsVars() {
   onlyIf { isCiBuilding }
   doFirst {
     println "::set-output name=slimjar::${jar.archiveFileName.get()}"
-    println "::set-output name=libszip::${tasks.zipLibs.archiveFileName.get()}"
+    println "::set-output name=libstar::${tasks.tarLibs.archiveFileName.get()}"
     println "::set-output name=fatjar::${fatJar.archiveFileName.get()}"
     println "::set-output name=version::${project.version}"
   }

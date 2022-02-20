@@ -37,7 +37,7 @@ jobs:
         run: |
           pushd build/libs
           cp ${{ steps.exec.outputs.slimjar }} NiSCore-SLIM.jar
-          cp ${{ steps.exec.outputs.libszip }} NiSCore-libs.zip
+          cp ${{ steps.exec.outputs.libstar }} NiSCore-libs.tar.gz
           cp ${{ steps.exec.outputs.fatjar }} NiSCore-FAT.jar
           popd
 
@@ -45,6 +45,6 @@ jobs:
         uses: ncipollo/release-action@v1
         if: startsWith(github.ref, 'refs/tags/')
         with:
-          artifacts: build/libs/NiSCore-SLIM.jar,build/libs/NiSCore-libs.zip,build/libs/NiSCore-FAT.jar
+          artifacts: build/libs/NiSCore-SLIM.jar,build/libs/NiSCore-libs.tar.gz,build/libs/NiSCore-FAT.jar
           name: NiSCore ${{ steps.exec.outputs.version }}
           token: ${{ secrets.GITHUB_TOKEN }}
